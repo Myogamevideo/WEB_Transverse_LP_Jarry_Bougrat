@@ -15,12 +15,12 @@ const Query = `
 `;
 
 import {
-    typeDef as User,
-    resolvers as userResolvers,
-} from './Schema - GraphQL Schema ( Typedefs & Resolvers )/User.schema.js';
+  typeDef as User,
+  resolvers as userResolvers,
+} from './Schema/User.schema.js';
 
 
 export const schema = makeExecutableSchema({
-    typeDefs: [ Query, User],
-    resolvers: userResolvers,
+  typeDefs: [Query, User],
+  resolvers: userResolvers,
 });
