@@ -15,12 +15,12 @@ const Query = `
 `;
 
 import {
-  typeDef as User,
-  resolvers as userResolvers,
-} from './Schema/User.schema.js';
+  typeDef as Music,
+  resolvers as musicResolvers,
+} from './Schema/Music.schema';
 
 
 export const schema = makeExecutableSchema({
-  typeDefs: [Query, User],
-  resolvers: userResolvers,
+  typeDefs: [Query, Music],
+  resolvers: musicResolvers,
 });
