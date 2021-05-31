@@ -23,10 +23,10 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    createPlaylist(name: String!, description: String!, creator: User!): Boolean
+    createPlaylist(name: String!, description: String!, creator: User!): Playlist
     createPlaylistWithInput(input: PlaylistInput!): Playlist
-    addMusicToPlaylist(_id: ID!,input: MusicInput!): Boolean
-    updatePlaylist(_id: ID!,input: PlaylistInput!): Playlist
+    addMusicToPlaylist(_id: ID!, musicInput: MusicInput!): Playlist
+    updatePlaylist(_id: ID!, playlistInput: PlaylistInput!): Playlist
     deletePlaylist(_id: ID!): Boolean
   }
 `;
@@ -50,8 +50,8 @@ export const resolvers = {
     createPlaylistWithInput: async (root, { playlistInput }, context, info) => {
       return await Playlist.create(playlistInput);
     },
-    addTaskToPlaylist: async (root, { _id, music }) => {
-      var music = await Music.create(music);
+    addMusicToPlaylist: async (root, { _id, musicInput }) => {
+      var music = await Music.create(musicInput);
       var playlist = await Playlist.findByIdAndUpdate(_id, {
         $push: {
           musics: music
@@ -59,6 +59,7 @@ export const resolvers = {
       })
       return await playlist.save();
     },
+    // TODO: add remove from playlist
     updatePlaylist: async (root, { _id, playlistInput }) => {
       return Playlist.findByIdAndUpdate(_id, playlistInput, { new: true });
     },
