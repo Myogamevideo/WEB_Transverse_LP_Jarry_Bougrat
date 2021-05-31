@@ -25,8 +25,12 @@ import {
   resolvers as playlistResolvers,
 } from './Schema/Playlist.schema';
 
+import {
+  typeDef as User,
+  resolvers as userResolvers,
+} from './Schema/User.schema';
 
 export const schema = makeExecutableSchema({
-  typeDefs: [Query, Music, Playlist],
-  resolvers: merge(musicResolvers, playlistResolvers),
+  typeDefs: [Query, Music, Playlist, User],
+  resolvers: merge(musicResolvers, playlistResolvers, userResolvers),
 });
