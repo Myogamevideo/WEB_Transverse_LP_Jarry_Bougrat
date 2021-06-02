@@ -1,40 +1,17 @@
-const { GraphQLScalarType, Kind } = require('graphql');
-import { ApolloServer, gql } from 'apollo-server';
 import { User } from '../Model/User';
 
-export const dateScalar = new GraphQLScalarType({
-  name: 'Date',
-  description: 'Date custom scalar type',
-  serialize(value) {
-    return value.getTime();
-  },
-  parseValue(value) {
-    return new Date(value);
-  },
-  parseLiteral(ast) {
-    if (ast.kind === Kind.INT) {
-      return new Date(parseInt(ast.value, 10));
-    }
-    return null;
-  },
-});
-
-export const typeDefs = gql`
-  scalar Date
-
+export const typeDef = `
   type User {
-    username: String
-    password: String
-    dateOfBirth: Date
+    username: String!
+    password: String!
     playlists: [Playlist]
     musics: [Music]
     token: String
   }
 
   input UserInput{
-    username: String
-    password: String
-    dateOfBirth: Date
+    username: String!
+    password: String!
     token: String
   }
 
@@ -44,19 +21,18 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    createUser(username: String!, password: String!, dateOfBirth: Date!): User
+    createUser(username: String!, password: String!): User
     createUserWithInput(userInput: UserInput!): User
     updateUser(_id: ID!, userInput: UserInput!): User
     deleteUser(_id: ID!): Boolean
     addToPlaylists(playlistId: ID!): [Playlist]
-    addToMusics(musicId: ID!): [Musics]
+    addToMusics(musicId: ID!): [Music]
   }
 `;
 
 // TODO: add addToPlaylists and addToMusics with inputPlaylist and inputMusic
 
 export const resolvers = {
-  Date: dateScalar,
   Query: {
     users: async () => {
       return await User.find().populate('musics').populate('playlists');
@@ -66,9 +42,9 @@ export const resolvers = {
     },
   },
   Mutation: {
-    createUser: async (root, { username, password, dateOfBirth }, context, info) => {
+    createUser: async (root, { username, password }, context, info) => {
       // TODO: hash password ?
-      return await User.create({ username, password, dateOfBirth });
+      return await User.create({ username, password });
     },
     createUserWithInput: async (root, { userInput }, context, info) => {
       // TODO: hash password ?
