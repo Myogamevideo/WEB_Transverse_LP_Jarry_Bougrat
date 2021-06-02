@@ -1,17 +1,17 @@
 import { Music } from '../Model/Music';
 
-export const typeDefs = gql`
+export const typeDef = `
   type Music {
     _id: ID!
-    title: String
-    duration: Number
+    title: String!
+    duration: Int
     author: User
     feat: [User]
   }
 
-  type MusicInput {
-    title: String
-    duration: Number
+  input MusicInput {
+    title: String!
+    duration: Int
     author: User
     feat: [User]
   }
@@ -22,9 +22,9 @@ export const typeDefs = gql`
   }
 
   extend type Mutation {
-    createMusic(title: String!, author: User!, duration: Number!, feat: [User!]): Music
+    createMusic(title: String!, author: ID!, duration: Int, feat: [ID!]): Music
     createFromMusic(musicInput: MusicInput!): Music
-    updateMusic(_id: ID!, musicInput: MusicInput!!): Music
+    updateMusic(_id: ID!, musicInput: MusicInput!): Music
     deleteMusic(_id: ID!): Boolean
   }
 `;

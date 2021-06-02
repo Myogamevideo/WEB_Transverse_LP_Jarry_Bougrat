@@ -1,17 +1,17 @@
 import { Playlist } from "../Model/Playlist";
 import { Music } from "../Model/Music";
 
-export const typeDefs = gql`
+export const typeDef = `
   type Playlist {
     _id: ID!
-    name: String
+    name: String!
     description: String
     creator: User
     musics: [Music]
   }
 
   input PlaylistInput{
-    name: String
+    name: String!
     description: String
     creator: User
   }
