@@ -4,7 +4,7 @@ import gql from "graphql-tag";
 
 const GET_GRAPHQL_INFO = gql`
   {
-    userSchemaAssert
+    _tryConnectivity
   }
 `;
 

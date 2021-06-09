@@ -4,6 +4,7 @@ import { merge } from 'lodash';
 const Query = `
   type Query {
     _empty: String
+    _tryConnectivity: Boolean
   }
 
   type Mutation {
@@ -14,6 +15,14 @@ const Query = `
     _empty: String
   }
 `;
+
+const defaultResolvers = {
+  Query: {
+    _tryConnectivity: async () => {
+      return true;
+    },
+  }
+};
 
 import {
   typeDef as Music,
@@ -32,5 +41,5 @@ import {
 
 export const schema = makeExecutableSchema({
   typeDefs: [Query, Music, Playlist, User],
-  resolvers: merge(musicResolvers, playlistResolvers, userResolvers),
+  resolvers: merge(musicResolvers, playlistResolvers, userResolvers, defaultResolvers),
 });
