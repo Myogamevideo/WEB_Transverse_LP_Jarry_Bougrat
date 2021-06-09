@@ -7,7 +7,16 @@ dotenv.config();
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 
-const server = new ApolloServer({ schema });
+const server = new ApolloServer({
+  schema, context: ({ req }) => {
+    const token = req.headers.authorization || '';
+
+    // TODO: getUser has to be created ? Use the mongoose to find it ?
+    const user = getUser(token);
+
+    return { user };
+  }
+});
 
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);

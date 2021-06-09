@@ -28,6 +28,7 @@ export const typeDef = `
     deleteUser(_id: ID!): Boolean
     addToPlaylists(playlistId: ID!): [Playlist]
     addToMusics(musicId: ID!): [Music]
+    login(username: String!, password: String!): User
   }
 `;
 
@@ -77,5 +78,13 @@ export const resolvers = {
       return await playuserlist.save();
     },
     // TODO: add remove from musics
+    login: async (root, { username, password }, context, info) => {
+      // TODO: hash password ?
+      // return await User.create({ username, password });
+
+      // user check uf the user exists
+      // check if passwords matches
+      // make the token
+    },
   }
 };
