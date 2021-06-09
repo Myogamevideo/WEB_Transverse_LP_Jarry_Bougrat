@@ -50,7 +50,8 @@ export const resolvers = {
       return Music.findByIdAndUpdate(_id, musicInput, { new: true });
     },
     deleteMusic: async (root, { _id }, context, info) => {
-      return Music.remove({ _id });
+      const result = await Music.remove({ _id });
+      return result.deletedCount > 0;
     }
   }
 };

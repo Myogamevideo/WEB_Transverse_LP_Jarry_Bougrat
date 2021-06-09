@@ -66,7 +66,8 @@ export const resolvers = {
       return Playlist.findByIdAndUpdate(_id, playlistInput, { new: true });
     },
     deletePlaylist: async (root, { _id }, context, info) => {
-      return Playlist.remove({ _id });
+      const result = await Playlist.remove({ _id });
+      return result.deletedCount > 0;
     },
   }
 };

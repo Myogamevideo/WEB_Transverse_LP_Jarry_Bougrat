@@ -56,7 +56,8 @@ export const resolvers = {
       return await User.findByIdAndUpdate(_id, userInput, { new: true });
     },
     deleteUser: async (root, { _id }, context, info) => {
-      return await User.remove({ _id });
+      const result = await User.remove({ _id });
+      return result.deletedCount > 0;
     },
     addToPlaylists: async (root, { _id, playlistId }) => {
       var user = await User.findByIdAndUpdate(_id, {
