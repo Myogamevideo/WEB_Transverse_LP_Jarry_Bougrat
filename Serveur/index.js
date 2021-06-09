@@ -7,7 +7,7 @@ dotenv.config();
 
 mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 
-const server = new ApolloServer({ schema, mocks: true });
+const server = new ApolloServer({ schema });
 
 server.listen().then(({ url }) => {
   console.log(`🚀  Server ready at ${url}`);
