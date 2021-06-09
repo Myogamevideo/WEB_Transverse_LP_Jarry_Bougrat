@@ -9,7 +9,7 @@ const GET_MUSIC = gql`
   query Musics($id: ID!) {
     music(_id: $id) {
       _id
-      name
+      title
     }
   }
 `;
@@ -23,11 +23,11 @@ function Music({ arg, id }) {
     if (error) return `Error! ${error.message}`;
 
     const music = data.music;
-    console.log("Data received from Project: ", music);
+    console.log("Data received from Music: ", music);
     return (
         <div>
             <h2>
-                {music.name}
+                {music.title}
             </h2>
         </div>
     );
