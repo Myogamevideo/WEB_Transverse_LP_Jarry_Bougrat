@@ -7,7 +7,7 @@ const GET_MUSICS = gql`
   {
     musics {
       _id
-      name
+      title
     }
   }
 `;
@@ -21,9 +21,9 @@ function Musics() {
     return (
         <ul>
             {data.musics.map(item =>
-                <li key={item._id} value={item.name} className="music-list-item">
+                <li key={item._id} value={item.title} className="music-list-item">
                     <h3>
-                        {item.name}
+                        {item.title}
                     </h3>
                 </li>
             )}
