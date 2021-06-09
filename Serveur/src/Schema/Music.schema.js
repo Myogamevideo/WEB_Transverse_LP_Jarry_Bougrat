@@ -5,15 +5,15 @@ export const typeDef = `
     _id: ID!
     title: String!
     duration: Int
-    author: User
+    author: User!
     feat: [User]
   }
 
   input MusicInput {
     title: String!
     duration: Int
-    author: User
-    feat: [User]
+    author: ID!
+    feat: [ID]
   }
 
   extend type Query {

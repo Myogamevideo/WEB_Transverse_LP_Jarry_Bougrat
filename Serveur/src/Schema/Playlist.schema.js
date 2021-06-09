@@ -6,14 +6,14 @@ export const typeDef = `
     _id: ID!
     name: String!
     description: String
-    creator: User
+    creator: User!
     musics: [Music]
   }
 
   input PlaylistInput{
     name: String!
     description: String
-    creator: User
+    creator: ID!
   }
 
   extend type Query {
@@ -23,9 +23,9 @@ export const typeDef = `
   }
 
   extend type Mutation {
-    createPlaylist(name: String!, description: String!, creator: User!): Playlist
+    createPlaylist(name: String!, description: String!, creator: ID!): Playlist
     createPlaylistWithInput(input: PlaylistInput!): Playlist
-    addMusicToPlaylist(_id: ID!, musicInput: MusicInput!): Playlist
+    addMusicToPlaylist(_id: ID!, musicId: ID!): Playlist
     updatePlaylist(_id: ID!, playlistInput: PlaylistInput!): Playlist
     deletePlaylist(_id: ID!): Boolean
   }
@@ -34,24 +34,26 @@ export const typeDef = `
 export const resolvers = {
   Query: {
     playlists: async () => {
-      return await Playlist.find().populate('musics');
+      return await Playlist.find().populate('creator').populate('musics');
     },
     playlist: async (root, { _id }, context, info) => {
-      return await Playlist.findOne({ _id }).populate('musics');
+      return await Playlist.findOne({ _id }).populate('creator').populate('musics');
     },
     playlistsFromCreator: async (root, { creator }, context, info) => {
-      return await Playlist.findOne({ creator }).populate('musics');
+      return await Playlist.findOne({ creator }).populate('creator').populate('musics');
     },
   },
   Mutation: {
     createPlaylist: async (root, { name, description, creator }, context, info) => {
+      // TODO: automaticaly add playlist to user
       return await Playlist.create({ name, description, creator });
     },
     createPlaylistWithInput: async (root, { playlistInput }, context, info) => {
+      // TODO: automaticaly add playlist to user
       return await Playlist.create(playlistInput);
     },
-    addMusicToPlaylist: async (root, { _id, musicInput }) => {
-      var music = await Music.create(musicInput);
+    addMusicToPlaylist: async (root, { _id, musicId }) => {
+      var music = await Music.findById(musicId);
       var playlist = await Playlist.findByIdAndUpdate(_id, {
         $push: {
           musics: music

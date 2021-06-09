@@ -2,6 +2,7 @@ import { User } from '../Model/User';
 
 export const typeDef = `
   type User {
+    _id: ID!
     username: String!
     password: String!
     playlists: [Playlist]
