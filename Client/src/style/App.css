@@ -1,5 +1,17 @@
+html{
+  height: 100vh;
+}
+
+body{
+  height: inherit;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+
 .App {
-  text-align: center;
+  flex: 1;
 }
 
 .App-logo {
@@ -7,32 +19,124 @@
   pointer-events: none;
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
 
-.App-header {
+.App {
   background-color: #282c34;
-  min-height: 100vh;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
 }
 
-.App-link {
-  color: #61dafb;
+.header{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid gray;
+  background: #444552;
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+.navbar-icon{
+  margin: 1em;
+}
+
+.title-with-logo{
+  display: flex;
+  flex-direction: row;
+  padding: .5em 1em;
+  align-items: center;
+  justify-content: center;
+}
+
+.app-logo{
+  height: 2em;
+  margin-right: 1em;
+}
+
+.header-title{
+  margin: 0;
+}
+
+.nav-list{
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  padding: 0;
+  margin: 0;
+  text-align: center;
+}
+
+.sidebar-list{
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 0;
+  margin: 0;
+}
+.sidebar-list li{
+  padding: .5em;
+}
+
+.nav-list a{
+  padding: .5em;
+  flex: 1 1;
+  border: 1px solid #494949;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.nav-list p {
+  margin:0;
+}
+
+.container{
+  padding: 1em;
+  flex: 1;
+}
+
+.sidebar{
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  right: 4em;
+  padding: 1em;
+  background: #494949;
+}
+
+.status-ok {
+  background: forestgreen;
+  border-radius: 3px;
+  padding: 0.1em 0.5em;
+}
+
+.status-error {
+  background: tomato;
+  border-radius: 3px;
+  padding: 0.1em 0.5em;
+}
+
+.status-warning {
+  background: orange;
+  border-radius: 3px;
+  padding: 0.1em 0.5em;
+}
+
+ul{
+  list-style-type: none;
+  padding: 0;
+}
+
+.playlist-list-item{
+  border-radius: 12px;
+  padding: .25em 1.5em;
+  background: #444552;
+  margin-bottom: 1em;
+}
+
+.music-list-item{
+  border-radius: 12px;
+  padding: .25em 1.5em;
+  background: #444552;
+  margin-bottom: 1em;
 }
