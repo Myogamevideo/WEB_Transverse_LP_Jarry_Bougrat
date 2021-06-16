@@ -1,5 +1,8 @@
 import { User } from '../Model/User';
 
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcryptjs');
+
 const {
   UserInputError,
   AuthenticationError,
