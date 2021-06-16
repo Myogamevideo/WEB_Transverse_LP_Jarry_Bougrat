@@ -54,12 +54,19 @@ export const resolvers = {
   },
   Mutation: {
     createUser: async (root, { username, password }, context, info) => {
-      // TODO: hash password ?
+      if (!username || !password) throw UserInputError('Invalid credentials');
+
+      const userFound = await User.findOne({ username });
+      if (userFound) throw new UserInputError('Username already used.');
+
+      password = await bcrypt.hash(password, 10);
+
       return await User.create({ username, password });
     },
     createUserWithInput: async (root, { userInput }, context, info) => {
-      // TODO: hash password ?
-      //input.password = await bcrypt.hash(input.password, 10);
+
+      password = await bcrypt.hash(password, 10);
+
       return await User.create(userInput);
     },
     updateUser: async (root, { _id, userInput }) => {
