@@ -9,12 +9,13 @@ mongoose.connect(process.env.MONGO_URL, { useNewUrlParser: true });
 
 const server = new ApolloServer({
   schema, context: ({ req }) => {
-    const token = req.headers.authorization || '';
+    /*const token = req.headers.authorization || '';
 
     // TODO: getUser has to be created ? Use the mongoose to find it ?
     const user = getUser(token);
 
-    return { user };
+    return { user };*/
+    return;
   }
 });
 
