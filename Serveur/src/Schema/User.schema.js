@@ -1,5 +1,11 @@
 import { User } from '../Model/User';
 
+const {
+  UserInputError,
+  AuthenticationError,
+} = require("apollo-server")
+
+
 export const typeDef = `
   type User {
     _id: ID!
@@ -75,16 +81,37 @@ export const resolvers = {
           musics: musicId
         }
       })
-      return await playuserlist.save();
+      return await user.save();
     },
     // TODO: add remove from musics
+    // TO TEST
     login: async (root, { username, password }, context, info) => {
-      // TODO: hash password ?
-      // return await User.create({ username, password });
+      if (!username || !password) throw UserInputError('Login credentials check error');
 
-      // user check uf the user exists
-      // check if passwords matches
-      // make the token
+      const user = await User.findOne({ username });
+      if (!user) throw new AuthenticationError('Invalid credentials');
+
+      const match = await bcrypt.compare(password, user.password);
+      if (!match) throw new AuthenticationError('Invalid credentials');
+
+      const token = getToken(user);
+
+      return {
+        id: user._id,
+        ...user._doc,
+        token,
+      };
     },
   }
 };
+
+const getToken = ({ id, username, email }) =>
+  jwt.sign(
+    {
+      id,
+      username,
+      email
+    },
+    process.env.SECRET,
+    { expiresIn: '1d' }
+  );
