@@ -1,6 +1,49 @@
 import React from "react";
+import { Fragment } from "react";
 import { FaRegUserCircle, FaHome, FaProjectDiagram } from "react-icons/fa";
-import {Link} from "react-router-dom";
+import { Link } from "react-router-dom";
+
+function GetNav() {
+    const sessionToken = localStorage.getItem('session_token');
+
+    if (!sessionToken) return (
+        <Link to="/login">
+            <li>
+                <FaRegUserCircle />
+                <p>Login</p>
+            </li>
+        </Link>
+    );
+
+    return (
+        <Fragment>
+            <Link to="/me">
+                <li>
+                    <FaRegUserCircle />
+                    <p>Profile</p>
+                </li>
+            </Link>
+            <Link to="/playlists">
+                <li>
+                    <FaProjectDiagram />
+                    <p>Playlists</p>
+                </li>
+            </Link>
+            <Link to="/musics">
+                <li>
+                    <FaProjectDiagram />
+                    <p>Musics</p>
+                </li>
+            </Link>
+            <Link to="/logout">
+                <li>
+                    <FaProjectDiagram />
+                    <p>Logout</p>
+                </li>
+            </Link>
+        </Fragment>
+    );
+}
 
 class Navbar extends React.Component {
 
@@ -10,28 +53,11 @@ class Navbar extends React.Component {
                 <ul className="nav-list">
                     <Link to="/home">
                         <li>
-                            <FaHome/>
+                            <FaHome />
                             <p>Home</p>
                         </li>
                     </Link>
-                    <Link to="/me">
-                        <li>
-                            <FaRegUserCircle/>
-                            <p>Profile</p>
-                        </li>
-                    </Link>
-                    <Link to="/playlists">
-                        <li>
-                            <FaProjectDiagram/>
-                            <p>Playlists</p>
-                        </li>
-                    </Link>
-                    <Link to="/musics">
-                        <li>
-                            <FaProjectDiagram/>
-                            <p>Musics</p>
-                        </li>
-                    </Link>
+                    <GetNav />
                 </ul>
             </nav>
         );
