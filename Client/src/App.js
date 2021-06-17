@@ -22,7 +22,7 @@ function App() {
                     <HomePage />
                 </Route>
                 <Route path="/me">
-                    <ProfilPage />
+                    {!sessionStorage.getItem('session_token') ? <Redirect to="/home" /> : <ProfilPage />}
                 </Route>
                 <Route path="/login">
                     {sessionStorage.getItem('session_token') ? <Redirect to="/me" /> : <UserLogin />}
