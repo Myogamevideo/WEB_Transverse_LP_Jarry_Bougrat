@@ -5,24 +5,8 @@ import { Link } from "react-router-dom";
 
 function GetNav() {
     const sessionToken = sessionStorage.getItem('session_token');
-
-    if (!sessionToken) return (
-        <Link to="/login">
-            <li>
-                <FaRegUserCircle />
-                <p>Login</p>
-            </li>
-        </Link>
-    );
-
     return (
         <Fragment>
-            <Link to="/me">
-                <li>
-                    <FaRegUserCircle />
-                    <p>Profile</p>
-                </li>
-            </Link>
             <Link to="/playlists">
                 <li>
                     <FaProjectDiagram />
@@ -35,12 +19,29 @@ function GetNav() {
                     <p>Musics</p>
                 </li>
             </Link>
-            <Link to="/home" onClick={() => sessionStorage.removeItem('session_token')}>
-                <li>
-                    <FaProjectDiagram />
-                    <p>Logout</p>
-                </li>
-            </Link>
+            {!sessionToken ? (
+                <Link to="/login">
+                    <li>
+                        <FaRegUserCircle />
+                        <p>Login</p>
+                    </li>
+                </Link>
+            ) : (
+                <Fragment>
+                    <Link to="/me">
+                        <li>
+                            <FaRegUserCircle />
+                            <p>Profile</p>
+                        </li>
+                    </Link >
+                    <Link to="/home" onClick={() => sessionStorage.removeItem('session_token')}>
+                        <li>
+                            <FaProjectDiagram />
+                            <p>Logout</p>
+                        </li>
+                    </Link>
+                </Fragment>
+            )}
         </Fragment>
     );
 }
