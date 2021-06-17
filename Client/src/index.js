@@ -10,7 +10,10 @@ import ApolloClient, { InMemoryCache, gql } from 'apollo-boost';
 
 const client = new ApolloClient({
     uri: 'http://localhost:4000/',
-    cache: new InMemoryCache()
+    cache: new InMemoryCache(),
+    headers: {
+        authorization: sessionStorage.getItem('session_token') || null,
+    },
 });
 
 client.query({
@@ -24,11 +27,11 @@ client.query({
 
 ReactDOM.render(
     <BrowserRouter>
-        <ApolloProvider client={ client }>
+        <ApolloProvider client={client}>
             <App />
         </ApolloProvider>
     </BrowserRouter>,
-  document.getElementById('root')
+    document.getElementById('root')
 );
 
 serviceWorker.unregister();

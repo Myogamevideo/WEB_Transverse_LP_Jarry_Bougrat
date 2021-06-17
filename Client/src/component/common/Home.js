@@ -16,6 +16,15 @@ function CheckConfig() {
   return <span className="status-ok">OK</span>;
 }
 
+// TEMP - TO REMOVE
+function CheckAuthentication() {
+  const sessionToken = localStorage.getItem('session_token');
+
+  if (!sessionToken) return <span className="status-warning">Not logged in</span>
+
+  return <span className="status-ok">logged in !</span>
+}
+
 class HomePage extends Component {
   render() {
     return (
@@ -30,9 +39,13 @@ class HomePage extends Component {
         <p>
           GraphQL status: <CheckConfig />
         </p>
+        <p>
+          Authentication status: <CheckAuthentication />
+        </p>
         <p>We gonna build some queries, that will be sent to the server</p>
         <p>Queries:</p>
         <ul>
+          {/* TODO: update the list */}
           <li>
             <strong>GetUserInformation</strong>: get user datas by id
           </li>
