@@ -4,7 +4,7 @@ import { FaRegUserCircle, FaHome, FaProjectDiagram } from "react-icons/fa";
 import { Link } from "react-router-dom";
 
 function GetNav() {
-    const sessionToken = localStorage.getItem('session_token');
+    const sessionToken = sessionStorage.getItem('session_token');
 
     if (!sessionToken) return (
         <Link to="/login">
