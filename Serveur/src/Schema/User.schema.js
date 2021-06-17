@@ -130,7 +130,7 @@ const getToken = ({ id, username, email }) =>
   );
 
 export const getUser = (token) => {
-  jwt.verify(token, process.env.SECRET, (err, decoded) => {
+  return jwt.verify(token, process.env.SECRET, (err, decoded) => {
     console.log('getUser err', err);
     console.log('getUser decoded', decoded);
 
