@@ -46,6 +46,7 @@ export const resolvers = {
   Mutation: {
     createPlaylist: async (root, { name, description, creator }, context, info) => {
       // TODO: automaticaly add playlist to user
+      // TODO: If no creator specified, check the logged in
       return await Playlist.create({ name, description, creator });
     },
     createPlaylistWithInput: async (root, { playlistInput }, context, info) => {

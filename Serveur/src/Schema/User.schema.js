@@ -49,14 +49,15 @@ export const resolvers = {
       return await User.find().populate('musics').populate('playlists');
     },
     user: async (root, { _id }, context, info) => {
-
-      if (!context.user || context.user.id !== _id) return;
+      console.log(context);
+      if (_id === "") _id = context.user.id;
 
       return await User.findOne({ _id }).populate('musics').populate('playlists');
     },
   },
   Mutation: {
     createUser: async (root, { username, password }, context, info) => {
+
       if (!username || !password) throw UserInputError('Invalid credentials');
 
       const userFound = await User.findOne({ username });
