@@ -6,26 +6,14 @@ import App from './App';
 import * as serviceWorker from './serviceWorker';
 import { BrowserRouter } from "react-router-dom";
 import { ApolloProvider } from "@apollo/react-hooks";
-import ApolloClient, { InMemoryCache, gql, HttpLink, ApolloLink, concat } from 'apollo-boost';
-
-const httpLink = new HttpLink({ uri: '/graphql' });
-
-const tryAppendSessionTokenToHeaders = new ApolloLink((operation, forward) => {
-    // add the authorization to the headers
-    operation.setContext(({ headers = {} }) => ({
-        headers: {
-            ...headers,
-            authorization: localStorage.getItem('session_token') || null,
-        }
-    }));
-
-    return forward(operation);
-});
+import ApolloClient, { InMemoryCache, gql } from 'apollo-boost';
 
 const client = new ApolloClient({
     uri: 'http://localhost:4000/',
     cache: new InMemoryCache(),
-    link: concat(tryAppendSessionTokenToHeaders, httpLink),
+    headers: {
+        authorization: sessionStorage.getItem('session_token') || null,
+    },
 });
 
 client.query({

@@ -49,6 +49,9 @@ export const resolvers = {
       return await User.find().populate('musics').populate('playlists');
     },
     user: async (root, { _id }, context, info) => {
+
+      if (!context.user || context.user.id !== _id) return;
+
       return await User.findOne({ _id }).populate('musics').populate('playlists');
     },
   },
@@ -125,3 +128,13 @@ const getToken = ({ id, username, email }) =>
     process.env.SECRET,
     { expiresIn: '1d' }
   );
+
+export const getUser = (token) => {
+  jwt.verify(token, process.env.SECRET, (err, decoded) => {
+    console.log('getUser err', err);
+    console.log('getUser decoded', decoded);
+
+    // TODO: return the complete user from mongoose ?
+    return decoded;
+  });
+}
