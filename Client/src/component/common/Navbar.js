@@ -35,7 +35,7 @@ function GetNav() {
                     <p>Musics</p>
                 </li>
             </Link>
-            <Link to="/logout">
+            <Link to="/home" onClick={() => sessionStorage.removeItem('session_token')}>
                 <li>
                     <FaProjectDiagram />
                     <p>Logout</p>
