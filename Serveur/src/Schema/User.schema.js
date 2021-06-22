@@ -1,3 +1,4 @@
+import { Playlist } from '../Model/Playlist';
 import { User } from '../Model/User';
 
 const jwt = require('jsonwebtoken');
@@ -35,8 +36,11 @@ export const typeDef = `
     createUserWithInput(userInput: UserInput!): User
     updateUser(_id: ID!, userInput: UserInput!): User
     deleteUser(_id: ID!): Boolean
-    addToPlaylists(playlistId: ID!): [Playlist]
-    addToMusics(musicId: ID!): [Music]
+    addToPlaylists(playlistId: ID!): User
+    removeFromPlaylists(playlistId: ID!): User
+    removeAllPlaylists: Boolean
+    addToMusics(musicId: ID!): User
+    removeFromMusics(musicId: ID!): User
     login(username: String!, password: String!): User
   }
 `;
@@ -77,10 +81,14 @@ export const resolvers = {
       return await User.findByIdAndUpdate(_id, userInput, { new: true });
     },
     deleteUser: async (root, { _id }, context, info) => {
+
+      await Playlist.deleteMany({ creator: _id });
+
       const result = await User.remove({ _id });
+
       return result.deletedCount > 0;
     },
-    addToPlaylists: async (root, { _id, playlistId }) => {
+    addToPlaylists: async (root, { playlistId }) => {
       var user = await User.findByIdAndUpdate(_id, {
         $push: {
           musics: playlistId
@@ -88,8 +96,37 @@ export const resolvers = {
       })
       return await user.save();
     },
-    // TODO: add remove from playlist
-    addToMusics: async (root, { _id, musicId }) => {
+    removeFromPlaylists: async (root, { playlistId }, context, info) => {
+      if (!context.user) throw new AuthenticationError('You must be connected.');
+
+      var user = await User.findByIdAndUpdate(context.user.id, {
+        $pull: {
+          playlists: playlistId
+        }
+      });
+
+      if (user.playlists.includes(playlistId)) {
+        await Playlist.deleteOne({ _id: playlistId });
+      }
+
+      return await user.save();
+    },
+    removeAllPlaylists: async (root, data, context, info) => {
+      if (!context.user) throw new AuthenticationError('You must be connected.');
+      var user = await User.findById(context.user.id);
+
+      if (user.playlists.length > 0) {
+        await Playlist.deleteMany({ creator: user._id });
+
+        user.playlists = [];
+
+        await user.save();
+      }
+
+      return user.playlists.length === 0;
+    },
+    addToMusics: async (root, { musicId }) => {
+
       var user = await User.findByIdAndUpdate(_id, {
         $push: {
           musics: musicId
@@ -97,8 +134,19 @@ export const resolvers = {
       })
       return await user.save();
     },
-    // TODO: add remove from musics
-    // TO TEST
+    removeFromMusics: async (root, { musicId }, context, info) => {
+      if (!context.user) throw new AuthenticationError('You must be connected.');
+
+      var user = await User.findByIdAndUpdate(context.user.id, {
+        $pull: {
+          musics: {
+            _id: musicId,
+          }
+        }
+      })
+
+      return await user.save();
+    },
     login: async (root, { username, password }, context, info) => {
       if (!username || !password) throw UserInputError('Login credentials check error');
 

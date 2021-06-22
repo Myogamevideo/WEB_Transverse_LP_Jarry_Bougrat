@@ -1,4 +1,6 @@
 import { Music } from '../Model/Music';
+import { Playlist } from '../Model/Playlist';
+import { User } from '../Model/User';
 
 export const typeDef = `
   type Music {
@@ -41,16 +43,59 @@ export const resolvers = {
   },
   Mutation: {
     createMusic: async (root, { title, author, duration, feat }, context, info) => {
-      return await Music.create({ title, author, duration, feat });
+      if (title === '' || duration === '') throw new UserInputError('Invalid blank values.');
+
+      if ((!author || author === '') && !context.user) throw new UserInputError('Invalid creator.');
+
+      if (!author || author === '') author = context.user.id;
+
+      const newMusic = await Music.create({ title, author, duration, feat });
+
+      const user = await User.findByIdAndUpdate(author, {
+        $push: {
+          musics: newMusic
+        }
+      });
+
+      return newMusic;
     },
     createFromMusic: async (root, { musicInput }, context, info) => {
-      return await Music.create(musicInput);
+      if (musicInput.title === '' || musicInput.duration === '') throw new UserInputError('Invalid blank values.');
+
+      if ((!musicInput.author || musicInput.author === '') && !context.user) throw new UserInputError('Invalid creator.');
+
+      if (!musicInput.author || musicInput.author === '') musicInput.author = context.user.id;
+
+      const newMusic = await Music.create(musicInput);
+
+      const user = await User.findByIdAndUpdate(musicInput.author, {
+        $push: {
+          musics: newMusic
+        }
+      });
+
+      return newMusic;
     },
     updateMusic: async (root, { _id, musicInput }, context, info) => {
       return Music.findByIdAndUpdate(_id, musicInput, { new: true });
     },
     deleteMusic: async (root, { _id }, context, info) => {
-      const result = await Music.remove({ _id });
+      const music = await Music.findById(_id);
+
+      await User.findByIdAndUpdate(music.author, {
+        $pull: {
+          musics: music._id
+        }
+      });
+
+      await Playlist.updateMany({ musics: music._id }, {
+        $pull: {
+          musics: music._id
+        }
+      });
+
+      const result = await Music.deleteOne({ _id: music._id });
+
       return result.deletedCount > 0;
     }
   }
