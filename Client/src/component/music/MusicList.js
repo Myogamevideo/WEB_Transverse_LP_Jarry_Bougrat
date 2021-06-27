@@ -1,7 +1,7 @@
-import React, {Component} from 'react';
+import React, { Component, Fragment } from 'react';
 import gql from "graphql-tag";
-import {useQuery} from "@apollo/react-hooks";
-import {Link} from "react-router-dom";
+import { useQuery, useMutation } from "@apollo/react-hooks";
+import { Link } from "react-router-dom";
 
 const GET_MUSICS = gql`
   {
@@ -13,8 +13,34 @@ const GET_MUSICS = gql`
   }
 `;
 
+const CREATE_MUSIC = gql`
+  mutation CreateMusic($title: String!, $author: ID!) {
+    createMusic(title: $title, author: $author) {
+      _id
+      title
+    }
+  }
+`;
+
+function AddMusic() {
+    let title;
+    const [createMusic, { data }] = useMutation(CREATE_MUSIC);
+
+    return (
+        <form onSubmit={e => {
+            e.preventDefault();
+            createMusic({ variables: { title: title.value, author: '' } });
+            title.value = '';
+        }}>
+            <h2>Create a music</h2>
+            <input type="text" id="title" className="form-control" ref={htmlElement => { title = htmlElement; }} />
+            <input type="submit" value="Add" />
+        </form>
+    );
+}
+
 function Musics() {
-    const {loading, error, data} = useQuery(GET_MUSICS);
+    const { loading, error, data } = useQuery(GET_MUSICS);
 
     if (loading) return "Loading...";
     if (error) return `Error! ${error.message}`;
@@ -42,8 +68,14 @@ class MusicList extends Component {
     render() {
         return (
             <div className="container">
+                {sessionStorage.getItem('session_token') ? (
+                    <Fragment>
+                        <AddMusic />
+                        <hr />
+                    </Fragment>
+                ) : ''}
                 <h4>List of all musics.</h4>
-                <Musics/>
+                <Musics />
             </div>
         );
     }

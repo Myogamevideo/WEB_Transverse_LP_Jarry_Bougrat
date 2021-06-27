@@ -95,7 +95,7 @@ export const resolvers = {
       var music = await Music.findById(musicId);
       var playlist = await Playlist.findByIdAndUpdate(_id, {
         $pull: {
-          musics: music
+          musics: music._id
         }
       });
       return await playlist.save();

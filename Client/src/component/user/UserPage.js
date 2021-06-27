@@ -43,7 +43,7 @@ function UserSheet({ id }) {
           </tr>
           <tr>
             <th>My playlists:</th>
-            <td>{userInfos.playslists ? userInfos.playslists.length : 0}</td>
+            <td>{userInfos.playlists ? userInfos.playlists.length : 0}</td>
           </tr>
         </tbody>
       </table>
