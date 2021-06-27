@@ -2,6 +2,7 @@ import React, { Component, Fragment } from 'react';
 import gql from "graphql-tag";
 import { useQuery, useMutation } from "@apollo/react-hooks";
 import { Link } from "react-router-dom";
+import { FaMinus } from "react-icons/fa";
 
 const GET_MUSICS = gql`
   {
@@ -19,6 +20,12 @@ const CREATE_MUSIC = gql`
       _id
       title
     }
+  }
+`;
+
+const DELETE_MUSIC = gql`
+  mutation DeleteMusic($_id: ID!) {
+    deleteMusic(_id: $_id)
   }
 `;
 
@@ -40,7 +47,8 @@ function AddMusic() {
 }
 
 function Musics() {
-    const { loading, error, data } = useQuery(GET_MUSICS);
+    const { loading, error, data } = useQuery(GET_MUSICS, { pollInterval: 500 });
+    const [deleteMusic, deleteMusicResult] = useMutation(DELETE_MUSIC);
 
     if (loading) return "Loading...";
     if (error) return `Error! ${error.message}`;
@@ -52,6 +60,14 @@ function Musics() {
                     <Link to={"/music/" + item._id}>
                         <h3>
                             {item.title}
+                            {sessionStorage.getItem('session_token') ? (
+                                <button className="btn btn-danger" onClick={
+                                    e => {
+                                        e.preventDefault();
+                                        deleteMusic({ variables: { _id: item._id } });
+                                    }
+                                } > <FaMinus fontSize="1.5em" /> </button>
+                            ) : ''}
                         </h3>
 
                         <p>

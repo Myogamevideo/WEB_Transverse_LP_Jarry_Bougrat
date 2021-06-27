@@ -1,7 +1,7 @@
 import React, { Component } from "react";
-import { useQuery } from "@apollo/react-hooks";
+import { useQuery, useMutation } from "@apollo/react-hooks";
 import { IoIosClose, IoMdCheckmark } from "react-icons/io";
-import { FaPlusSquare } from "react-icons/fa";
+import { FaMinus } from "react-icons/fa";
 import { withRouter } from "react-router-dom";
 import gql from "graphql-tag";
 
@@ -14,10 +14,17 @@ const GET_MUSIC = gql`
   }
 `;
 
-function Music({ arg, id }) {
+const DELETE_MUSIC = gql`
+  mutation DeleteMusic($_id: ID!) {
+    deleteMusic(_id: $_id)
+  }
+`;
+
+function Music({ arg, id, history }) {
     const { loading, error, data } = useQuery(GET_MUSIC, {
         variables: { id }
     });
+    const [deleteMusic, deleteMusicResult] = useMutation(DELETE_MUSIC);
 
     if (loading) return "Loading...";
     if (error) return `Error! ${error.message}`;
@@ -28,6 +35,15 @@ function Music({ arg, id }) {
         <div>
             <h2>
                 {music.title}
+                {sessionStorage.getItem('session_token') ? (
+                    <button className="btn btn-danger" onClick={
+                        e => {
+                            e.preventDefault();
+                            deleteMusic({ variables: { _id: id } });
+                            history.push('/musics');
+                        }
+                    } > <FaMinus fontSize="1.5em" /> </button>
+                ) : ''}
             </h2>
         </div>
     );
@@ -39,7 +55,7 @@ class MusicDetail extends Component {
         console.log(this);
         return (
             <div className="container">
-                <Music id={this.props.match.params.id} />
+                <Music id={this.props.match.params.id} history={this.props.history} />
             </div>
         );
     }

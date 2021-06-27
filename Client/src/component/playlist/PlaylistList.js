@@ -32,9 +32,7 @@ const CREATE_PLAYLIST = gql`
 
 const DELETE_PLAYLIST = gql`
   mutation DeletePlaylist($_id: ID!) {
-    deletePlaylist(_id: $_id) {
-      _id
-    }
+    deletePlaylist(_id: $_id)
   }
 `;
 
@@ -42,7 +40,6 @@ function AddPlaylist() {
   let name;
   let description;
   const [createPlaylist, { data }] = useMutation(CREATE_PLAYLIST);
-  const [deletePlaylist, deletePlayslistResult] = useMutation(DELETE_PLAYLIST);
 
   return (
     <form onSubmit={e => {
@@ -61,6 +58,7 @@ function AddPlaylist() {
 
 function Playlists() {
   const { loading, error, data } = useQuery(GET_PLAYLISTS, { pollInterval: 1000 });
+  const [deletePlaylist, deletePlayslistResult] = useMutation(DELETE_PLAYLIST);
 
   if (loading) return "Loading...";
   if (error) return `Error! ${error.message}`;

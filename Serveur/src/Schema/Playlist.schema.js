@@ -105,6 +105,7 @@ export const resolvers = {
     },
     deletePlaylist: async (root, { _id }, context, info) => {
       const playlist = await Playlist.findById(_id);
+      console.log(_id)
 
       await User.findByIdAndUpdate(playlist.creator, {
         $pull: {
